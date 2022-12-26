@@ -4,13 +4,18 @@ import {saveMediaMiddleware} from "../middlewares/saveMediaMiddleware.js";
 import Media from "../models/media.js";
 
 const addMediaFile = async (req,res) => {
+    try {
+        const { alt = '' } = req?.body;
+        const { filename } = req?.file || {};
+        const media = new Media({filename, alt})
 
-    const { alt } = req.body;
-    const { filename } = req?.file || {};
-    const media = new Media(filename,alt)
-    await media.save()
+        await media.save()
 
-    res.send(req.file)
+        res.send(req.file)
+    } catch  {
+        res.send('Не удалось сохранить файл')
+    }
+
 }
 
 const mediaRouter = new Router()
